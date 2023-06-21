@@ -2,41 +2,59 @@ package main
 
 import (
 	"crypto/tls"
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"strings"
 )
 
-func main() {
+type requestData struct {
+	Name  string `json:"name"`
+	Email string `json:"email"`
+}
 
-	cert, error := tls.LoadX509KeyPair("./certificate.crt", "./private.key")
-	if error != nil {
-		panic(error)
+func main() {
+	cert, err := tls.LoadX509KeyPair("./certificate.crt", "./private.key")
+	if err != nil {
+		panic(err)
 	}
 
-	customtlsConfig := &tls.Config{
+	customTLSConfig := &tls.Config{
 		Certificates: []tls.Certificate{cert},
 	}
 
 	httpClient := &http.Client{
 		Transport: &http.Transport{
-			TLSClientConfig: customtlsConfig,
+			TLSClientConfig: customTLSConfig,
 		},
 	}
 
 	hittingURL := "https://apideveloper.rblbank.com/test/sb/rbl/api/v1/sendernotification/rpay"
-
-	response, error := httpClient.Get(hittingURL)
+	data := requestData{
+		Name:  "razorpay",
+		Email: "razorpay@gmail.com",
+	}
+	payloadData, error := json.Marshal(data)
 	if error != nil {
 		panic(error)
 	}
+	payload := strings.NewReader(string(payloadData))
 
-	defer response.Body.Close()
-
-	responseBody, error := ioutil.ReadAll(response.Body)
-
-	if error != nil {
-		panic(error)
+	req, err := http.NewRequest("POST", hittingURL, payload)
+	if err != nil {
+		panic(err)
 	}
+	req.Header.Set("Content-Type", "application/json")
+	response, err := httpClient.Do(req)
+	if err != nil {
+		panic(err)
+	}
+    defer response.Body.Close()
+	responseBody, err := ioutil.ReadAll(response.Body)
+	if err != nil {
+		panic(err)
+	}
+
 	fmt.Println(string(responseBody))
 }
