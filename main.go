@@ -7,6 +7,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	// "os"
 	"strings"
 )
 
@@ -16,6 +17,10 @@ type requestData struct {
 }
 
 func main() {
+
+	// certificateEnv := os.Getenv("certificate")
+	// privatekeyEnv := os.Getenv("privatekey")
+
 	cert, err := tls.LoadX509KeyPair("./certificate.crt", "./private.key")
 	if err != nil {
 		panic(err)
@@ -56,7 +61,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	log.Println("SUCCESS","handshake completed")
+	log.Println("SUCCESS", "handshake completed")
 
 	fmt.Println(string(responseBody))
 }

@@ -1,0 +1,4 @@
+certificate.crt
+private.key
+expiredcertificate.crt
+expiredprivate.key
