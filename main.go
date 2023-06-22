@@ -18,8 +18,7 @@ type requestData struct {
 
 func main() {
 
-	// certificateEnv := os.Getenv("certificate")
-	// privatekeyEnv := os.Getenv("privatekey")
+	
 
 	cert, err := tls.LoadX509KeyPair("./certificate.crt", "./private.key")
 	if err != nil {
