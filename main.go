@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"strings"
 )
@@ -50,11 +51,12 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-    defer response.Body.Close()
+	defer response.Body.Close()
 	responseBody, err := ioutil.ReadAll(response.Body)
 	if err != nil {
 		panic(err)
 	}
+	log.Println("SUCCESS","handshake completed")
 
 	fmt.Println(string(responseBody))
 }
