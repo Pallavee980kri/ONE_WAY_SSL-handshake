@@ -18,8 +18,6 @@ type requestData struct {
 
 func main() {
 
-	
-
 	cert, err := tls.LoadX509KeyPair("./certificate.crt", "./private.key")
 	if err != nil {
 		panic(err)
